@@ -1,6 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace GenericConfigHandler.Tests
 {
@@ -27,30 +25,6 @@ namespace GenericConfigHandler.Tests
             Assert.AreEqual(2, value.InnerObject.Array[0]);
             Assert.AreEqual(4, value.InnerObject.Array[1]);
             Assert.AreEqual(6, value.InnerObject.Array[2]);
-        }
-
-        public class Outer
-        {
-            [XmlAttribute]
-            public int Integer { get; set; }
-
-            [XmlAttribute]
-            public string String { get; set; }
-
-            public Inner InnerObject { get; set; }
-        }
-
-        public class Inner
-        {
-            [XmlAttribute]
-            public int Integer1 { get; set; }
-
-            [XmlAttribute]
-            public string String1 { get; set; }
-
-            [XmlArray("list")]
-            [XmlArrayItem("item")]
-            public int[] Array { get; set; }
         }
     }
 }

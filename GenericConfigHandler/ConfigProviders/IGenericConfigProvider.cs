@@ -4,6 +4,6 @@ namespace GenericConfigHandler.ConfigProviders
 {
     public interface IGenericConfigProvider
     {
-        XmlNode ReadSettingsFromConfig(string section);
+        string ReadSettingsFromConfig(string section);
     }
 }

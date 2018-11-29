@@ -6,12 +6,23 @@ namespace GenericConfigHandler.ConfigProviders
 {
     public class GenericConfigDefaultProvider : IGenericConfigProvider
     {
-        public XmlNode ReadSettingsFromConfig(string section)
+        private readonly ConfigContentType _contentType;
+
+        public GenericConfigDefaultProvider(ConfigContentType contentType)
+        {
+            _contentType = contentType;
+        }
+
+        public string ReadSettingsFromConfig(string section)
         {
             try
             {
                 XmlNode node = (XmlNode)ConfigurationManager.GetSection(section);
-                return node;
+
+                return _contentType == ConfigContentType.InnerText
+                    ? node.InnerText.Trim()
+                    : node.OuterXml;
+
             }
             catch (Exception exc)
             {

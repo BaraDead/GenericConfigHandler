@@ -52,13 +52,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericConfigCustomSerializerSectionHandlerTests.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="En.cs" />
+    <Compile Include="EnWithFlags.cs" />
+    <Compile Include="HandlerTests\CustomHandlerTests.cs" />
     <Compile Include="GenericConfigJsonSectionHandlerTests.cs" />
     <Compile Include="GenericConfigXmlSectionHandlerTests.cs" />
+    <Compile Include="Inner.cs" />
+    <Compile Include="Outer.cs" />
+    <Compile Include="PackagersTests\GenericConfigJsonPackagerTests.cs" />
+    <Compile Include="PackagersTests\GenericConfigXmlPackagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProvidersTests\GenericConfigDefaultProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

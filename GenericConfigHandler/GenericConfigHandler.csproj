@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigProviders\ConfigContentType.cs" />
     <Compile Include="ConfigProviders\GenericConfigDefaultProvider.cs" />
     <Compile Include="ConfigProviders\IGenericConfigProvider.cs" />
     <Compile Include="GenericConfigException.cs" />

@@ -21,9 +21,9 @@ namespace GenericConfigHandler
 
         public T GetSettings<T>(string section)
         {
-            XmlNode node = _configProvider.ReadSettingsFromConfig(section);
+            string content = _configProvider.ReadSettingsFromConfig(section);
 
-            return _packager.DeserializeSettings<T>(node);
+            return _packager.DeserializeSettings<T>(content);
         }
 
         public object Create(object parent, object configContext, XmlNode section)

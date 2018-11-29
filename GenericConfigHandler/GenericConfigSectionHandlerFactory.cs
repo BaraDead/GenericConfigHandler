@@ -11,7 +11,7 @@ namespace GenericConfigHandler
         /// <returns></returns>
         public IGenericConfigSectionHandler GetJsonHandler()
         {
-            return new GenericConfigSectionHandler(new GenericConfigDefaultProvider(), new GenericConfigJsonPackager());
+            return new GenericConfigSectionHandler(new GenericConfigDefaultProvider(ConfigContentType.InnerText), new GenericConfigJsonPackager());
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace GenericConfigHandler
         /// <returns></returns>
         public IGenericConfigSectionHandler GetXmlHandler()
         {
-            return new GenericConfigSectionHandler(new GenericConfigDefaultProvider(), new GenericConfigXmlPackager());
+            return new GenericConfigSectionHandler(new GenericConfigDefaultProvider(ConfigContentType.OuterXml), new GenericConfigXmlPackager());
         }
 
         /// <summary>

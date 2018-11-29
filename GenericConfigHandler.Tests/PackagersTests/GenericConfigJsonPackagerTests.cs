@@ -1,23 +1,40 @@
 ﻿using System;
+using GenericConfigHandler.Packagers;
 using NUnit.Framework;
 
-namespace GenericConfigHandler.Tests
+namespace GenericConfigHandler.Tests.PackagersTests
 {
     [TestFixture]
-    public class GenericConfigJsonSectionHandlerTests
+    public class GenericConfigJsonPackagerTests
     {
-        private IGenericConfigSectionHandler _handler;
+        private IGenericConfigPackager _packager;
 
         [SetUp]
         public void Setup()
         {
-            _handler = new GenericConfigSectionHandlerFactory().GetJsonHandler();
+            _packager = new GenericConfigJsonPackager();
+        }
+
+        [Test]
+        public void ParseErrorTest()
+        {
+            Assert.That(() => _packager.DeserializeSettings<byte>("NotExists"),
+                Throws.TypeOf<GenericConfigException>(),
+                "GenericConfigException must be thrown");
+        }
+
+        [Test]
+        public void SettingsNotExistTest()
+        {
+            Assert.That(() => _packager.DeserializeSettings<byte>(""),
+                Throws.TypeOf<GenericConfigException>(),
+                "GenericConfigException must be thrown");
         }
 
         [Test]
         public void BooleanTest()
         {
-            bool value = _handler.GetSettings<bool>("Boolean");
+            bool value = _packager.DeserializeSettings<bool>("True");
 
             Assert.AreEqual(true, value);
         }
@@ -25,7 +42,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void IntegerTest()
         {
-            int value = _handler.GetSettings<int>("Integer");
+            int value = _packager.DeserializeSettings<int>("1");
 
             Assert.AreEqual(1, value);
         }
@@ -33,23 +50,15 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void ByteTest()
         {
-            byte value = _handler.GetSettings<byte>("Byte");
+            byte value = _packager.DeserializeSettings<byte>("255");
 
             Assert.AreEqual(255, value);
         }
 
         [Test]
-        public void SettingsNotExistTest()
-        {
-            Assert.That(() => _handler.GetSettings<byte>("NotExists"),
-                Throws.TypeOf<GenericConfigException>(),
-                "GenericConfigException must be thrown");
-        }
-
-        [Test]
         public void ByteOverflowTest()
         {
-            Assert.That(() => _handler.GetSettings<byte>("ByteOverflow"),
+            Assert.That(delegate { _packager.DeserializeSettings<byte>("256"); },
                 Throws.TypeOf<GenericConfigException>(),
                 "GenericConfigException must be thrown");
         }
@@ -57,7 +66,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void DecimalTest()
         {
-            decimal value = _handler.GetSettings<decimal>("Decimal");
+            decimal value = _packager.DeserializeSettings<decimal>("45.8");
 
             Assert.AreEqual(45.8m, value);
         }
@@ -65,7 +74,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void DateTimeTest()
         {
-            DateTime value = _handler.GetSettings<DateTime>("DateTime");
+            DateTime value = _packager.DeserializeSettings<DateTime>("2018-05-15 15:26:37.123");
 
             Assert.AreEqual(new DateTime(2018, 5, 15, 15, 26, 37, 123), value);
         }
@@ -73,7 +82,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void TimeSpanTest()
         {
-            TimeSpan value = _handler.GetSettings<TimeSpan>("TimeSpan");
+            TimeSpan value = _packager.DeserializeSettings<TimeSpan>("13:35:37");
 
             Assert.AreEqual(new TimeSpan(13, 35, 37), value);
         }
@@ -81,7 +90,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void EnumTest()
         {
-            En value = _handler.GetSettings<En>("Enum");
+            En value = _packager.DeserializeSettings<En>("EnumValue1");
 
             Assert.AreEqual(En.EnumValue1, value);
         }
@@ -89,7 +98,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void EnumWithFlagsTest()
         {
-            EnWithFlags value = _handler.GetSettings<EnWithFlags>("EnumWithFlags");
+            EnWithFlags value = _packager.DeserializeSettings<EnWithFlags>("EnumValue2,EnumValue3");
 
             Assert.AreEqual(EnWithFlags.EnumValue2 | EnWithFlags.EnumValue3, value);
         }
@@ -97,7 +106,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void ClassTest()
         {
-            Outer value = _handler.GetSettings<Outer>("Class");
+            Outer value = _packager.DeserializeSettings<Outer>(Constants.ClassSettings);
 
             Assert.AreEqual(5, value.Integer);
             Assert.AreEqual("SomeString", value.String);
@@ -112,7 +121,7 @@ namespace GenericConfigHandler.Tests
         [Test]
         public void ClassWithNullInnerObjectTest()
         {
-            Outer value = _handler.GetSettings<Outer>("Class1");
+            Outer value = _packager.DeserializeSettings<Outer>(Constants.Class1Settings);
 
             Assert.AreEqual(5, value.Integer);
             Assert.AreEqual("SomeString", value.String);

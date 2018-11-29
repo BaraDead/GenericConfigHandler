@@ -1,31 +1,27 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Xml;
 using Newtonsoft.Json;
 
 namespace GenericConfigHandler.Packagers
 {
     public class GenericConfigJsonPackager : IGenericConfigPackager
     {
-        public T DeserializeSettings<T>(XmlNode node)
+        public T DeserializeSettings<T>(string content)
         {
-            if (node == null)
+            if (string.IsNullOrWhiteSpace(content))
             {
                 throw new GenericConfigException("Cannot read settings");
             }
 
-            string data = node.InnerText.Trim();
-            string section = node.Name;
-
             try
             {
-                T settings = CreateInstance<T>(data);
+                T settings = CreateInstance<T>(content);
                 return settings;
             }
             catch (Exception exc)
             {
-                throw new GenericConfigException(string.Format("Cannot deserialize read settings from section '{0}'", section), exc);
+                throw new GenericConfigException("Cannot deserialize settings", exc);
             }
         }
 

@@ -7,24 +7,25 @@ namespace GenericConfigHandler.Packagers
 {
     public class GenericConfigXmlPackager : IGenericConfigPackager
     {
-        public T DeserializeSettings<T>(XmlNode node)
+        public T DeserializeSettings<T>(string content)
         {
-            if (node == null)
+            if (string.IsNullOrWhiteSpace(content))
             {
                 throw new GenericConfigException("Cannot read settings");
             }
 
-            string data = node.OuterXml;
-            string section = node.Name;
-
             try
             {
-                T settings = CreateInstance<T>(data, section);
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(content);
+                string section = xmlDocument.DocumentElement.Name;
+
+                T settings = CreateInstance<T>(content, section);
                 return settings;
             }
             catch (Exception exc)
             {
-                throw new GenericConfigException(string.Format("Cannot deserialize read settings from section '{0}'", section), exc);
+                throw new GenericConfigException("Cannot deserialize settings", exc);
             }
         }
 
