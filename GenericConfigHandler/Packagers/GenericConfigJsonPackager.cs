@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace GenericConfigHandler.Packagers
@@ -10,7 +9,7 @@ namespace GenericConfigHandler.Packagers
     {
         public T DeserializeSettings<T>(string content)
         {
-            if (string.IsNullOrWhiteSpace(content))
+            if (string.IsNullOrEmpty(content))
             {
                 throw new GenericConfigException("Cannot read settings");
             }
