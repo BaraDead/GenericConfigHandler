@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -27,17 +28,10 @@ namespace GenericConfigHandler.Packagers
 
         private T CreateInstance<T>(string data)
         {
-            Type type = typeof(T);
-
-            if (type.IsEnum)
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
+            if (converter.CanConvertFrom(typeof(string)))
             {
-                return (T)Enum.Parse(type, data);
-            }
-
-            MethodInfo parseMethod = type.GetMethod("Parse", new Type[] { typeof(string) });
-            if (parseMethod != null)
-            {
-                return (T)parseMethod.Invoke(null, new object[] { data });
+                return (T)converter.ConvertFromString(data);
             }
 
             return GetClassValue<T>(data);
